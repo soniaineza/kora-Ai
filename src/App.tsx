@@ -1,11 +1,9 @@
-import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AppShell } from './components/layout/AppShell';
 import { Dashboard } from './pages/Dashboard';
 import { GrowthCenter } from './pages/GrowthCenter';
 import { Customers } from './pages/Customers';
 import { PlaceholderPage } from './pages/PlaceholderPage';
-// We will import the new pages here once created
 import { WebsiteBuilder } from './pages/WebsiteBuilder';
 import { QRMenus } from './pages/QRMenus';
 import { WhatsAppCatalog } from './pages/WhatsAppCatalog';
@@ -40,5 +38,4 @@ export function App() {
         </Routes>
       </AppShell>
     </BrowserRouter>);
-
 }
