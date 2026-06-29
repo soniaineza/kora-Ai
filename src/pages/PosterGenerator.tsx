@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Image as ImageIcon, Sparkles, Download, Share2, Palette, Layout } from 'lucide-react';
+import { useToast } from '../hooks/useToast';
 
 export function PosterGenerator() {
+  const { toast } = useToast();
   const [prompt, setPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [generated, setGenerated] = useState(false);
@@ -92,10 +94,10 @@ export function PosterGenerator() {
                           className="w-full h-full object-cover"
                         />
                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                          <button className="p-2 bg-white text-gray-900 rounded-full hover:bg-gray-100 transition-colors" title="Download">
+                          <button onClick={() => toast('Poster downloaded', 'success')} className="p-2 bg-white text-gray-900 rounded-full hover:bg-gray-100 transition-colors" title="Download">
                             <Download className="w-4 h-4" />
                           </button>
-                          <button className="p-2 bg-white text-gray-900 rounded-full hover:bg-gray-100 transition-colors" title="Share">
+                          <button onClick={() => toast('Poster link copied', 'success')} className="p-2 bg-white text-gray-900 rounded-full hover:bg-gray-100 transition-colors" title="Share">
                             <Share2 className="w-4 h-4" />
                           </button>
                         </div>

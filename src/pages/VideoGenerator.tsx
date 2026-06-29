@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Video, Sparkles, Play, Download, Share2 } from 'lucide-react';
+import { useToast } from '../hooks/useToast';
 
 export function VideoGenerator() {
+  const { toast } = useToast();
   const [prompt, setPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [generated, setGenerated] = useState(false);
@@ -107,10 +109,10 @@ export function VideoGenerator() {
                   </div>
                 </div>
                 <div className="flex gap-2 mt-4">
-                  <button className="flex-1 py-2 bg-slate-900 text-white text-xs font-medium rounded-lg hover:bg-slate-800 transition-colors flex items-center justify-center gap-1.5">
+                  <button onClick={() => toast('Video downloaded', 'success')} className="flex-1 py-2 bg-slate-900 text-white text-xs font-medium rounded-lg hover:bg-slate-800 transition-colors flex items-center justify-center gap-1.5">
                     <Download className="w-3.5 h-3.5" /> Download
                   </button>
-                  <button className="flex-1 py-2 bg-white border border-gray-200 text-gray-700 text-xs font-medium rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center gap-1.5">
+                  <button onClick={() => toast('Video link copied', 'success')} className="flex-1 py-2 bg-white border border-gray-200 text-gray-700 text-xs font-medium rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center gap-1.5">
                     <Share2 className="w-3.5 h-3.5" /> Share
                   </button>
                 </div>

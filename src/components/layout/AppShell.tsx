@@ -7,7 +7,7 @@ import {
   Image as ImageIcon, Video, Calendar, Users, Megaphone,
   BarChart3, Puzzle, CreditCard, Settings,
   ChevronLeft, ChevronRight, Search, Bell,
-  Moon, Sun, X, Send, ChevronDown,
+  Moon, Sun, X, Send, ChevronDown, Menu,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -56,9 +56,16 @@ function Sidebar({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar: ()
   };
 
   return (
-    <aside
-      className={`bg-slate-900 h-screen flex flex-col transition-all duration-300 relative z-20 ${isOpen ? 'w-60' : 'w-16'}`}
-    >
+    <>
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-10 lg:hidden"
+          onClick={toggleSidebar}
+        />
+      )}
+      <aside
+        className={`bg-slate-900 h-screen flex flex-col transition-all duration-300 fixed lg:relative z-20 ${isOpen ? 'w-60 left-0' : 'w-16 -left-16 lg:left-0'}`}
+      >
       <div className="h-14 flex items-center justify-between px-3 border-b border-slate-800">
         {isOpen ? (
           <div className="flex items-center gap-2.5">
@@ -154,11 +161,12 @@ function Sidebar({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar: ()
 
       <button
         onClick={toggleSidebar}
-        className="absolute -right-3 top-14 bg-slate-900 border border-slate-700 rounded-full p-1 shadow-sm text-slate-400 hover:text-white transition-colors"
+        className="absolute -right-3 top-14 bg-slate-900 border border-slate-700 rounded-full p-1 shadow-sm text-slate-400 hover:text-white transition-colors hidden lg:block"
       >
         {isOpen ? <ChevronLeft className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
       </button>
     </aside>
+    </>
   );
 }
 
@@ -187,9 +195,9 @@ function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="relative w-full max-w-lg bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100"
+        className="relative w-full max-w-lg bg-white dark:bg-slate-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-slate-700"
       >
-        <div className="flex items-center px-4 py-3 border-b border-gray-100">
+        <div className="flex items-center px-4 py-3 border-b border-gray-100 dark:border-slate-700">
           <Search className="w-4 h-4 text-gray-400 mr-3" />
           <input
             type="text"
@@ -197,22 +205,22 @@ function CommandPalette({ isOpen, onClose }: { isOpen: boolean; onClose: () => v
             placeholder="Search pages..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="flex-1 bg-transparent border-none outline-none text-sm text-gray-900 placeholder-gray-400"
+            className="flex-1 bg-transparent border-none outline-none text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400"
           />
-          <span className="text-[11px] text-gray-400 border border-gray-200 rounded px-1.5 py-0.5 font-medium">ESC</span>
+          <span className="text-[11px] text-gray-400 border border-gray-200 dark:border-slate-600 rounded px-1.5 py-0.5 font-medium">ESC</span>
         </div>
         <div className="max-h-72 overflow-y-auto p-2">
           {filtered.length === 0 ? (
-            <div className="p-4 text-center text-sm text-gray-500">No results found.</div>
+            <div className="p-4 text-center text-sm text-gray-500 dark:text-gray-400">No results found.</div>
           ) : (
             filtered.map((item) => (
               <button
                 key={item.path}
                 onClick={() => { navigate(item.path); onClose(); }}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-50 transition-colors text-left"
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors text-left"
               >
                 <item.icon className="w-[18px] h-[18px] text-gray-400" />
-                <span className="text-sm text-gray-900">{item.name}</span>
+                <span className="text-sm text-gray-900 dark:text-gray-100">{item.name}</span>
               </button>
             ))
           )}
@@ -256,16 +264,16 @@ function AIAssistantDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
           <motion.div
             initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed inset-y-0 right-0 w-full max-w-sm bg-white shadow-xl z-50 flex flex-col"
+            className="fixed inset-y-0 right-0 w-full max-w-sm bg-white dark:bg-slate-800 shadow-xl z-50 flex flex-col"
           >
-            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-slate-700">
               <div className="flex items-center gap-2.5">
                 <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-kora-400 to-kora-600 flex items-center justify-center text-white">
                   <Sparkles className="w-3.5 h-3.5" />
                 </div>
-                <h2 className="font-semibold text-sm text-gray-900">AI Assistant</h2>
+                <h2 className="font-semibold text-sm text-gray-900 dark:text-white">AI Assistant</h2>
               </div>
-              <button onClick={onClose} className="p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors">
+              <button onClick={onClose} className="p-1.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -275,7 +283,7 @@ function AIAssistantDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
                 <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-[85%] rounded-xl px-3.5 py-2.5 text-sm leading-relaxed ${msg.role === 'user'
                     ? 'bg-kora-500 text-white rounded-tr-sm'
-                    : 'bg-gray-100 text-gray-900 rounded-tl-sm'
+                    : 'bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-gray-100 rounded-tl-sm'
                     }`}>
                     {msg.content}
                   </div>
@@ -283,7 +291,7 @@ function AIAssistantDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
               ))}
               {isTyping && (
                 <div className="flex justify-start">
-                  <div className="bg-gray-100 rounded-xl px-3.5 py-2.5 flex gap-1 items-center">
+                  <div className="bg-gray-100 dark:bg-slate-700 rounded-xl px-3.5 py-2.5 flex gap-1 items-center">
                     <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" />
                     <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }} />
                     <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }} />
@@ -292,15 +300,15 @@ function AIAssistantDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
               )}
             </div>
 
-            <div className="p-4 border-t border-gray-100">
-              <div className="flex items-center gap-2 bg-gray-50 rounded-xl p-1.5 border border-gray-200 focus-within:ring-2 focus-within:ring-kora-500/20">
+            <div className="p-4 border-t border-gray-100 dark:border-slate-700">
+              <div className="flex items-center gap-2 bg-gray-50 dark:bg-slate-700 rounded-xl p-1.5 border border-gray-200 dark:border-slate-600 focus-within:ring-2 focus-within:ring-kora-500/20">
                 <input
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                   placeholder="Ask Kora anything..."
-                  className="flex-1 bg-transparent border-none outline-none px-2 text-sm text-gray-900 placeholder-gray-500"
+                  className="flex-1 bg-transparent border-none outline-none px-2 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400"
                 />
                 <button
                   onClick={handleSend}
@@ -340,23 +348,29 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50">
+    <div className="flex h-screen overflow-hidden bg-gray-50 dark:bg-slate-900">
       <Sidebar isOpen={sidebarOpen} toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
 
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
-        <header className="h-14 bg-white border-b border-gray-100 flex items-center justify-between px-5 sticky top-0 z-10">
+        <header className="h-14 bg-white dark:bg-slate-800 border-b border-gray-100 dark:border-slate-700 flex items-center justify-between px-4 lg:px-5 sticky top-0 z-10">
           <div className="flex items-center gap-4 flex-1 min-w-0">
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="lg:hidden p-1.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700"
+            >
+              <Menu className="w-[18px] h-[18px]" />
+            </button>
             <div className="flex items-center gap-2.5">
-              <span className="font-semibold text-sm text-gray-900 truncate">Sunny Cafe</span>
-              <span className="px-1.5 py-0.5 bg-gray-100 text-gray-500 text-[10px] rounded-full font-medium">Cafe</span>
+              <span className="font-semibold text-sm text-gray-900 dark:text-white truncate">Sunny Cafe</span>
+              <span className="px-1.5 py-0.5 bg-gray-100 dark:bg-slate-700 text-gray-500 dark:text-gray-400 text-[10px] rounded-full font-medium">Cafe</span>
             </div>
             <button
               onClick={() => setCmdOpen(true)}
-              className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-lg text-xs text-gray-400 w-56 cursor-pointer hover:bg-gray-100 transition-colors border border-gray-100"
+              className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-gray-50 dark:bg-slate-700 rounded-lg text-xs text-gray-400 w-56 cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600 transition-colors border border-gray-100 dark:border-slate-600"
             >
               <Search className="w-3.5 h-3.5" />
               <span className="flex-1">Search anything...</span>
-              <span className="text-[10px] border border-gray-200 rounded px-1 py-0.5 font-medium">⌘K</span>
+              <span className="text-[10px] border border-gray-200 dark:border-slate-600 rounded px-1 py-0.5 font-medium">⌘K</span>
             </button>
           </div>
 
@@ -371,14 +385,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
             <button
               onClick={() => setIsDark(!isDark)}
-              className="p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+              className="p-1.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
             >
               {isDark ? <Sun className="w-[18px] h-[18px]" /> : <Moon className="w-[18px] h-[18px]" />}
             </button>
 
-            <button className="relative p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors">
+            <button className="relative p-1.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors">
               <Bell className="w-[18px] h-[18px]" />
-              <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-red-500 rounded-full ring-1 ring-white" />
+              <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-red-500 rounded-full ring-1 ring-white dark:ring-slate-800" />
             </button>
 
             <div className="w-7 h-7 rounded-full bg-gradient-to-br from-kora-400 to-kora-600 flex items-center justify-center text-white text-[10px] font-bold ml-1.5">
@@ -388,7 +402,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </header>
 
         <main className="flex-1 overflow-y-auto">
-          <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6 text-gray-900 dark:text-gray-100">
             {children}
           </div>
         </main>

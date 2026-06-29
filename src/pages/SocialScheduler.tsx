@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Plus, ChevronLeft, ChevronRight, Instagram, Facebook, Clock } from 'lucide-react';
+import { useToast } from '../hooks/useToast';
 
 export function SocialScheduler() {
+  const { toast } = useToast();
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const [currentMonth] = useState('October 2023');
 
@@ -12,7 +14,7 @@ export function SocialScheduler() {
           <h1 className="text-xl font-bold text-gray-900">Social Scheduler</h1>
           <p className="text-sm text-gray-500 mt-0.5">Plan and automate your social media content.</p>
         </div>
-        <button className="px-3.5 py-2 bg-kora-500 hover:bg-kora-600 text-white text-sm font-medium rounded-lg shadow-glow transition-colors flex items-center gap-1.5">
+        <button onClick={() => toast('New post composer opened', 'success')} className="px-3.5 py-2 bg-kora-500 hover:bg-kora-600 text-white text-sm font-medium rounded-lg shadow-glow transition-colors flex items-center gap-1.5">
           <Plus className="w-4 h-4" /> New Post
         </button>
       </div>

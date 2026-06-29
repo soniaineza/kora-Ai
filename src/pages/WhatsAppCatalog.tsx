@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { MessageCircle, RefreshCw, Share2, ExternalLink, Plus, CheckCircle2 } from 'lucide-react';
+import { useToast } from '../hooks/useToast';
 
 export function WhatsAppCatalog() {
+  const { toast } = useToast();
   const [isSyncing, setIsSyncing] = useState(false);
-  const handleSync = () => { setIsSyncing(true); setTimeout(() => setIsSyncing(false), 2000); };
+  const handleSync = () => { setIsSyncing(true); setTimeout(() => { setIsSyncing(false); toast('Catalog synced with WhatsApp', 'success'); }, 2000); };
 
   return (
     <div className="pb-12">
@@ -27,7 +29,7 @@ export function WhatsAppCatalog() {
           <div className="bg-white rounded-xl border border-gray-100 shadow-card overflow-hidden">
             <div className="p-4 border-b border-gray-100 flex justify-between items-center">
               <h2 className="text-sm font-semibold text-gray-900">Synced Products (50)</h2>
-              <button className="text-xs font-medium text-emerald-600 hover:text-emerald-700 flex items-center gap-1">
+              <button onClick={() => toast('Add product form opened', 'success')} className="text-xs font-medium text-emerald-600 hover:text-emerald-700 flex items-center gap-1">
                 <Plus className="w-3.5 h-3.5" /> Add New
               </button>
             </div>
@@ -59,10 +61,10 @@ export function WhatsAppCatalog() {
             <h2 className="text-base font-bold mb-1">WhatsApp Business</h2>
             <p className="text-emerald-50 text-xs mb-4">Your catalog is connected and currently live on WhatsApp.</p>
             <div className="space-y-2">
-              <button className="w-full py-2 bg-white text-emerald-600 text-xs font-medium rounded-lg hover:bg-emerald-50 transition-colors flex items-center justify-center gap-1.5">
+              <button onClick={() => toast('Catalog link copied to clipboard', 'success')} className="w-full py-2 bg-white text-emerald-600 text-xs font-medium rounded-lg hover:bg-emerald-50 transition-colors flex items-center justify-center gap-1.5">
                 <Share2 className="w-3.5 h-3.5" /> Share Catalog Link
               </button>
-              <button className="w-full py-2 bg-emerald-600/50 hover:bg-emerald-600/70 text-white text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 border border-emerald-400/30">
+              <button onClick={() => toast('Opening WhatsApp...', 'success')} className="w-full py-2 bg-emerald-600/50 hover:bg-emerald-600/70 text-white text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 border border-emerald-400/30">
                 <ExternalLink className="w-3.5 h-3.5" /> Open in WhatsApp
               </button>
             </div>
@@ -72,7 +74,7 @@ export function WhatsAppCatalog() {
             <h3 className="text-sm font-semibold text-gray-900 mb-3">Quick Actions</h3>
             <div className="space-y-1">
               {['Create Broadcast Message', 'Set up Auto-Replies', 'View Chat Analytics'].map((action) => (
-                <button key={action} className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors text-xs font-medium text-gray-700">
+                <button key={action} onClick={() => toast(`Opening ${action.toLowerCase()}...`, 'success')} className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors text-xs font-medium text-gray-700">
                   {action}
                 </button>
               ))}

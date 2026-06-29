@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AppShell } from './components/layout/AppShell';
+import { ToastProvider } from './components/ui/Toast';
 import { Dashboard } from './pages/Dashboard';
 import { GrowthCenter } from './pages/GrowthCenter';
 import { Customers } from './pages/Customers';
@@ -18,6 +19,7 @@ import { Integrations } from './pages/Integrations';
 export function App() {
   return (
     <BrowserRouter>
+      <ToastProvider>
       <AppShell>
         <Routes>
           <Route path="/" element={<Dashboard />} />
@@ -37,5 +39,6 @@ export function App() {
           <Route path="*" element={<PlaceholderPage />} />
         </Routes>
       </AppShell>
+      </ToastProvider>
     </BrowserRouter>);
 }

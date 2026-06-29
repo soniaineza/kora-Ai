@@ -2,11 +2,13 @@ import { useState } from 'react';
 import {
   Globe, Palette, Sparkles, LayoutTemplate, Upload, Eye,
 } from 'lucide-react';
+import { useToast } from '../hooks/useToast';
 
 export function WebsiteBuilder() {
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('details');
   const [isGenerating, setIsGenerating] = useState(false);
-  const handleGenerate = () => { setIsGenerating(true); setTimeout(() => setIsGenerating(false), 3000); };
+  const handleGenerate = () => { setIsGenerating(true); setTimeout(() => { setIsGenerating(false); toast('Website generated!', 'success'); }, 3000); };
 
   return (
     <div className="pb-12">
@@ -16,10 +18,10 @@ export function WebsiteBuilder() {
           <p className="text-sm text-gray-500 mt-0.5">Design and publish your professional online presence.</p>
         </div>
         <div className="flex items-center gap-2">
-          <button className="px-3 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-1.5">
+            <button onClick={() => toast('Opening preview...', 'success')} className="px-3 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-1.5">
             <Eye className="w-4 h-4" /> Preview
           </button>
-          <button className="px-3 py-2 bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 transition-colors flex items-center gap-1.5">
+          <button onClick={() => toast('Website published at sunnycafe.kora.site', 'success')} className="px-3 py-2 bg-slate-900 text-white text-sm font-medium rounded-lg hover:bg-slate-800 transition-colors flex items-center gap-1.5">
             <Globe className="w-4 h-4" /> Publish
           </button>
         </div>

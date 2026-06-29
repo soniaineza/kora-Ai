@@ -70,4 +70,6 @@ declare module 'lucide-react' {
   export const ImageIcon: Icon;
   export const CalendarIcon: Icon;
   export const MousePointerClick: Icon;
+  export const Menu: Icon;
+  export const XCircle: Icon;
 }
