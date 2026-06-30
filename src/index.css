@@ -145,3 +145,128 @@
     letter-spacing: 0.01em;
   }
 }
+
+html.dark {
+  --dark-bg: #0f0f0f;
+  --dark-card: #1a1a1a;
+  --dark-border: #2a2a2a;
+  --dark-text: #f0f0f0;
+  --dark-muted: #888;
+}
+
+html.dark body {
+  background-color: var(--dark-bg);
+  color: var(--dark-text);
+}
+
+html.dark .card,
+html.dark .card-sm {
+  background: var(--dark-card);
+  border-color: var(--dark-border);
+}
+
+html.dark .bg-white {
+  background-color: var(--dark-card) !important;
+}
+
+html.dark .bg-cream {
+  background-color: #181818 !important;
+}
+
+html.dark .bg-charcoal {
+  background-color: #f0f0f0 !important;
+}
+
+html.dark .text-charcoal {
+  color: var(--dark-text) !important;
+}
+
+html.dark .text-silver {
+  color: var(--dark-muted) !important;
+}
+
+html.dark .text-muted {
+  color: #666 !important;
+}
+
+html.dark .border-border {
+  border-color: var(--dark-border) !important;
+}
+
+html.dark .border-gray-100,
+html.dark .border-gray-200 {
+  border-color: var(--dark-border) !important;
+}
+
+html.dark .bg-gray-50,
+html.dark .bg-gray-100 {
+  background-color: #181818 !important;
+}
+
+html.dark .text-gray-500,
+html.dark .text-gray-600,
+html.dark .text-gray-700,
+html.dark .text-gray-900 {
+  color: var(--dark-text) !important;
+}
+
+html.dark .input-field {
+  background: #1a1a1a;
+  border-color: var(--dark-border);
+  color: var(--dark-text);
+}
+
+html.dark .input-field::placeholder {
+  color: #555;
+}
+
+html.dark .input-field:focus {
+  border-color: #D4AF37;
+}
+
+html.dark .btn-secondary {
+  background: var(--dark-card);
+  color: var(--dark-text);
+  border-color: var(--dark-border);
+}
+
+html.dark .btn-secondary:hover {
+  background: #2a2a2a;
+}
+
+html.dark .label {
+  color: var(--dark-muted);
+}
+
+html.dark .badge {
+  background: #2a2a2a;
+  color: var(--dark-text);
+}
+
+html.dark .hover\:bg-hover:hover {
+  background-color: #2a2a2a !important;
+}
+
+html.dark .shadow-premium,
+html.dark .shadow-premium-sm,
+html.dark .shadow-premium-lg,
+html.dark .shadow-card {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4) !important;
+}
+
+html.dark .ring-offset-white {
+  --tw-ring-offset-color: var(--dark-bg);
+}
+
+html.dark select option {
+  background: #1a1a1a;
+  color: var(--dark-text);
+}
+
+html.dark * {
+  scrollbar-color: #333 transparent;
+}
+
+html.dark *::-webkit-scrollbar-thumb {
+  background-color: #333;
+}

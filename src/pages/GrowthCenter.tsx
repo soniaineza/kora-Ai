@@ -6,6 +6,7 @@ import {
   Share2, Calendar,
 } from 'lucide-react';
 import { growthApi } from '../api/growth';
+import type { Poster } from '../api/types';
 
 export function GrowthCenter() {
   const [step, setStep] = useState<'input' | 'generating' | 'results'>('input');
@@ -14,7 +15,7 @@ export function GrowthCenter() {
   const [businessType, setBusinessType] = useState('Cafe');
   const [plan, setPlan] = useState<{
     goal: string; budget: string; businessType: string;
-    posters: string[]; whatsappMessage: string;
+    posters: Poster[]; whatsappMessage: string;
     weeklyPlan: { day: string; title: string; description: string }[];
   } | null>(null);
 
@@ -127,16 +128,17 @@ export function GrowthCenter() {
                   <h3 className="text-sm font-bold text-charcoal">AI Generated Posters</h3>
                 </div>
                 <div className="grid grid-cols-2 gap-3 mb-3">
-                  {plan.posters.map((src, i) => (
+                  {plan.posters.slice(0, 4).map((poster, i) => (
                     <div key={i} className="aspect-[4/5] bg-cream rounded-2xl overflow-hidden relative group">
-                      <img src={src} alt="Poster" className="w-full h-full object-cover" />
-                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-2xl">
+                      <img src={poster.imageUrl} alt={poster.title} className="w-full h-full object-cover" />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 rounded-2xl p-2">
+                        <p className="text-white text-xs font-semibold text-center leading-tight">{poster.title}</p>
                         <button className="px-3 py-1.5 bg-white text-charcoal rounded-2xl text-xs font-medium">Download</button>
                       </div>
                     </div>
                   ))}
                 </div>
-                <button className="w-full py-2.5 bg-cream hover:bg-hover text-silver text-sm font-medium rounded-2xl transition-colors">View All Designs</button>
+                <button className="w-full py-2.5 bg-cream hover:bg-hover text-silver text-sm font-medium rounded-2xl transition-colors">View All {plan.posters.length} Designs</button>
               </div>
 
               <div className="card p-5">

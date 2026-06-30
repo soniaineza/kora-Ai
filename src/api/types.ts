@@ -155,11 +155,16 @@ export interface TeamMember {
   avatar: string;
 }
 
+export interface Poster {
+  title: string;
+  imageUrl: string;
+}
+
 export interface GrowthPlan {
   goal: string;
   budget: string;
   businessType: string;
-  posters: string[];
+  posters: Poster[];
   whatsappMessage: string;
   weeklyPlan: { day: string; title: string; description: string }[];
 }
