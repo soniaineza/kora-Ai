@@ -62,7 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
     try {
-      const data = await apiFetch<{ user: User; company: Company | null }>('/api/me');
+      const data = await apiFetch<{ user: User; company: Company | null }>('/me');
       setState({ user: data.user, company: data.company, isAuthenticated: true, loading: false });
     } catch {
       localStorage.removeItem('kora_token');
@@ -74,11 +74,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function login(email: string, password: string): Promise<boolean> {
     try {
-      const data = await apiFetch<{ user: User; token: string }>('/api/auth/login', {
+      const data = await apiFetch<{ user: User; token: string }>('/auth/login', {
         method: 'POST', body: JSON.stringify({ email, password }),
       });
       localStorage.setItem('kora_token', data.token);
-      const me = await apiFetch<{ user: User; company: Company | null }>('/api/me');
+      const me = await apiFetch<{ user: User; company: Company | null }>('/me');
       setState({ user: me.user, company: me.company, isAuthenticated: true, loading: false });
       return true;
     } catch {
@@ -88,7 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function register(name: string, email: string, password: string): Promise<boolean> {
     try {
-      const data = await apiFetch<{ user: User; token: string }>('/api/auth/register', {
+      const data = await apiFetch<{ user: User; token: string }>('/auth/register', {
         method: 'POST', body: JSON.stringify({ name, email, password }),
       });
       localStorage.setItem('kora_token', data.token);
@@ -100,7 +100,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function registerCompany(form: Omit<Company, 'id'>): Promise<void> {
-    const data = await apiFetch<{ company: Company; token: string }>('/api/company', {
+      const data = await apiFetch<{ company: Company; token: string }>('/company', {
       method: 'POST', body: JSON.stringify(form),
     });
     localStorage.setItem('kora_token', data.token);
@@ -112,7 +112,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function updateCompany(form: Partial<Company>): Promise<void> {
-    const data = await apiFetch<{ company: Company }>('/api/company', {
+    const data = await apiFetch<{ company: Company }>('/company', {
       method: 'PUT', body: JSON.stringify(form),
     });
     setState((prev) => ({ ...prev, company: data.company }));

@@ -1,4 +1,5 @@
 import { db } from './db.js';
+import bcrypt from 'bcryptjs';
 
 function seed() {
   const existing = db.get('companies', () => true);
@@ -8,6 +9,10 @@ function seed() {
   }
 
   const companyId = '1';
+  const userId = '1';
+
+  const demoPassword = bcrypt.hashSync('demo123', 10);
+  db.run('users', { id: userId, name: 'Demo User', email: 'demo@kora.ai', password: demoPassword, company_id: companyId, created_at: new Date().toISOString() });
 
   const customers = [
     { id: 1, company_id: companyId, name: 'Alice Mugisha', phone: '+250 781 111 111', last_interaction: '2 hours ago', source: 'WhatsApp', status: 'Active', created_at: new Date().toISOString() },
