@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Store, Palette, Shield, Bell, CreditCard, Puzzle, Users,
   Check, Plus, Trash2, Smartphone, Layout, RefreshCw,
 } from 'lucide-react';
 import { useToast } from '../hooks/useToast';
+import { useAuth } from '../context/AuthContext';
 
 const tabs = [
   { id: 'profile', name: 'Business Profile', icon: Store },
@@ -36,8 +37,33 @@ const integrationsList = [
 
 export function Settings() {
   const { toast } = useToast();
+  const { company, updateCompany } = useAuth();
   const [activeTab, setActiveTab] = useState('profile');
-  const [selectedColor, setSelectedColor] = useState(brandColors[0]);
+  const [selectedColor, setSelectedColor] = useState(company?.brandColor || brandColors[0]);
+  const [profile, setProfile] = useState({
+    name: company?.name || '',
+    type: company?.type || '',
+    email: '',
+    phone: company?.phone || '',
+    address: company?.address || '',
+    website: company?.website || '',
+    description: company?.description || '',
+  });
+
+  useEffect(() => {
+    if (company) {
+      setProfile({
+        name: company.name,
+        type: company.type,
+        email: '',
+        phone: company.phone,
+        address: company.address,
+        website: company.website,
+        description: company.description,
+      });
+      setSelectedColor(company.brandColor);
+    }
+  }, [company]);
   const [integrations, setIntegrations] = useState(integrationsList);
   const [notifSettings, setNotifSettings] = useState({
     email: { newOrder: true, newLead: true, campaignReport: false, weeklyDigest: true, paymentReceipt: true },
@@ -94,7 +120,9 @@ export function Settings() {
               <div className="space-y-5">
                 <h2 className="text-sm font-semibold text-gray-900">Business Profile</h2>
                 <div className="flex items-center gap-4 pb-4 border-b border-gray-100">
-                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 text-lg font-bold">SC</div>
+                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 text-lg font-bold">
+                    {company?.name?.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() || 'K'}
+                  </div>
                   <div>
                     <button className="px-3.5 py-1.5 bg-white border border-gray-200 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors text-xs">Change Logo</button>
                     <p className="text-[10px] text-gray-500 mt-1">JPG, GIF or PNG. Max size of 800K</p>
@@ -103,28 +131,71 @@ export function Settings() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-medium text-gray-700 mb-1">Business Name</label>
-                    <input type="text" defaultValue="Sunny Cafe" className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-kora-500/20 text-sm text-gray-900" />
+                    <input
+                      type="text"
+                      value={profile.name}
+                      onChange={(e) => setProfile(p => ({ ...p, name: e.target.value }))}
+                      className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-kora-500/20 text-sm text-gray-900"
+                    />
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-700 mb-1">Business Type</label>
-                    <select className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-kora-500/20 text-sm text-gray-900">
+                    <select
+                      value={profile.type}
+                      onChange={(e) => setProfile(p => ({ ...p, type: e.target.value }))}
+                      className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-kora-500/20 text-sm text-gray-900"
+                    >
+                      <option value="">Select type...</option>
                       <option>Cafe</option>
                       <option>Restaurant</option>
-                      <option>Retail</option>
-                      <option>Service</option>
+                      <option>Retail Shop</option>
+                      <option>Salon & Spa</option>
+                      <option>Bakery</option>
+                      <option>Bar & Lounge</option>
+                      <option>Hotel</option>
+                      <option>Gym & Fitness</option>
+                      <option>Service Business</option>
+                      <option>Other</option>
                     </select>
                   </div>
                   <div className="md:col-span-2">
-                    <label className="block text-xs font-medium text-gray-700 mb-1">Email Address</label>
-                    <input type="email" defaultValue="hello@sunnycafe.com" className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-kora-500/20 text-sm text-gray-900" />
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Phone Number</label>
+                    <input
+                      type="tel"
+                      value={profile.phone}
+                      onChange={(e) => setProfile(p => ({ ...p, phone: e.target.value }))}
+                      className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-kora-500/20 text-sm text-gray-900"
+                    />
                   </div>
                   <div className="md:col-span-2">
-                    <label className="block text-xs font-medium text-gray-700 mb-1">Phone Number</label>
-                    <input type="tel" defaultValue="+250 788 123 456" className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-kora-500/20 text-sm text-gray-900" />
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Address</label>
+                    <input
+                      type="text"
+                      value={profile.address}
+                      onChange={(e) => setProfile(p => ({ ...p, address: e.target.value }))}
+                      className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-kora-500/20 text-sm text-gray-900"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Description</label>
+                    <textarea
+                      value={profile.description}
+                      onChange={(e) => setProfile(p => ({ ...p, description: e.target.value }))}
+                      rows={2}
+                      className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-kora-500/20 text-sm text-gray-900 resize-none"
+                    />
                   </div>
                 </div>
                 <div className="pt-4 border-t border-gray-100 flex justify-end">
-                  <button onClick={() => toast('Business profile saved', 'success')} className="px-5 py-2 bg-kora-500 hover:bg-kora-600 text-white text-sm font-medium rounded-lg shadow-glow transition-colors">Save Changes</button>
+                  <button
+                    onClick={() => {
+                      updateCompany(profile);
+                      toast('Business profile saved', 'success');
+                    }}
+                    className="px-5 py-2 bg-kora-500 hover:bg-kora-600 text-white text-sm font-medium rounded-lg shadow-glow transition-colors"
+                  >
+                    Save Changes
+                  </button>
                 </div>
               </div>
             )}

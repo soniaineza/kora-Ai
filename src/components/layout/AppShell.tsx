@@ -7,9 +7,10 @@ import {
   Image as ImageIcon, Video, Calendar, Users, Megaphone,
   BarChart3, Puzzle, CreditCard, Settings,
   ChevronLeft, ChevronRight, Search, Bell,
-  Moon, Sun, X, Send, ChevronDown, Menu,
+  Moon, Sun, X, Send, ChevronDown, Menu, LogOut,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../../context/AuthContext';
 
 const navSections = [
   {
@@ -48,7 +49,16 @@ const bottomItems = [
 
 function Sidebar({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar: () => void }) {
   const location = useLocation();
+  const { company, logout } = useAuth();
+  const navigate = useNavigate();
   const [expandedSections, setExpandedSections] = useState<string[]>([navSections[0]?.label ?? '']);
+
+  const initials = company?.name
+    ?.split(' ')
+    .map((w) => w[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase() || 'K';
   const toggleSection = (label: string) => {
     setExpandedSections((prev) =>
       prev.includes(label) ? prev.filter((l) => l !== label) : [...prev, label]
@@ -145,15 +155,18 @@ function Sidebar({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar: ()
           <div className="mt-4 mx-1 p-3 bg-slate-800 rounded-xl">
             <div className="flex items-center gap-2.5 mb-2.5">
               <div className="w-7 h-7 rounded-full bg-gradient-to-br from-kora-400 to-kora-600 flex items-center justify-center text-white text-[10px] font-bold">
-                SC
+                {initials}
               </div>
               <div className="min-w-0">
-                <p className="text-xs font-medium text-white truncate">Sunny Cafe</p>
-                <p className="text-[10px] text-slate-500 truncate">Kigali, Rwanda</p>
+                <p className="text-xs font-medium text-white truncate">{company?.name || 'My Business'}</p>
+                <p className="text-[10px] text-slate-500 truncate">{company?.address || company?.type || ''}</p>
               </div>
             </div>
-            <button className="w-full py-1.5 bg-kora-500 hover:bg-kora-600 text-white text-xs font-medium rounded-lg transition-colors">
-              + New Business
+            <button
+              onClick={() => { logout(); navigate('/login'); }}
+              className="w-full py-1.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5"
+            >
+              <LogOut className="w-3 h-3" /> Sign Out
             </button>
           </div>
         )}
@@ -327,10 +340,18 @@ function AIAssistantDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
 }
 
 export function AppShell({ children }: { children: React.ReactNode }) {
+  const { company } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [cmdOpen, setCmdOpen] = useState(false);
   const [aiOpen, setAiOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
+
+  const initials = company?.name
+    ?.split(' ')
+    .map((w) => w[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase() || 'K';
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', isDark);
@@ -361,8 +382,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <Menu className="w-[18px] h-[18px]" />
             </button>
             <div className="flex items-center gap-2.5">
-              <span className="font-semibold text-sm text-gray-900 dark:text-white truncate">Sunny Cafe</span>
-              <span className="px-1.5 py-0.5 bg-gray-100 dark:bg-slate-700 text-gray-500 dark:text-gray-400 text-[10px] rounded-full font-medium">Cafe</span>
+              <span className="font-semibold text-sm text-gray-900 dark:text-white truncate">{company?.name || 'Dashboard'}</span>
+              {company?.type && (
+                <span className="px-1.5 py-0.5 bg-gray-100 dark:bg-slate-700 text-gray-500 dark:text-gray-400 text-[10px] rounded-full font-medium">{company.type}</span>
+              )}
             </div>
             <button
               onClick={() => setCmdOpen(true)}
@@ -396,7 +419,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </button>
 
             <div className="w-7 h-7 rounded-full bg-gradient-to-br from-kora-400 to-kora-600 flex items-center justify-center text-white text-[10px] font-bold ml-1.5">
-              SC
+              {initials}
             </div>
           </div>
         </header>

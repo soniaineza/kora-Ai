@@ -7,6 +7,7 @@ import {
 import { useApi } from '../hooks/useApi';
 import { dashboardApi } from '../api/dashboard';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const iconMap: Record<string, React.ElementType> = {
   Users, QrCode, MessageCircle, Image: ImageIcon, Video, Globe, Megaphone,
@@ -26,6 +27,7 @@ const assets = [
 ];
 
 export function Dashboard() {
+  const { company } = useAuth();
   const navigate = useNavigate();
   const { data: m, loading: ml } = useApi(() => dashboardApi.getMetrics());
   const { data: health } = useApi(() => dashboardApi.getHealth());
@@ -52,7 +54,7 @@ export function Dashboard() {
     <div className="space-y-8">
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900 dark:text-white">Good morning, Sunny Cafe</h1>
+          <h1 className="text-xl font-bold text-gray-900 dark:text-white">Good morning, {company?.name || 'there'}</h1>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Here's what's happening with your business today.</p>
         </div>
         <button onClick={() => navigate('/growth')} className="flex items-center gap-1.5 px-3.5 py-2 bg-kora-500 hover:bg-kora-600 text-white text-sm font-medium rounded-lg transition-colors shadow-glow">
