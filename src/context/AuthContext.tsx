@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
 
 export interface Company {
   id: string;
@@ -24,116 +24,103 @@ interface AuthState {
   user: User | null;
   company: Company | null;
   isAuthenticated: boolean;
+  loading: boolean;
 }
 
 interface AuthContextType extends AuthState {
-  login: (email: string, password: string) => boolean;
-  register: (name: string, email: string, password: string) => boolean;
-  registerCompany: (data: Omit<Company, 'id'>) => void;
-  updateCompany: (data: Partial<Company>) => void;
+  login: (email: string, password: string) => Promise<boolean>;
+  register: (name: string, email: string, password: string) => Promise<boolean>;
+  registerCompany: (data: Omit<Company, 'id'>) => Promise<void>;
+  updateCompany: (data: Partial<Company>) => Promise<void>;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-const USERS_KEY = 'kora_users';
-const SESSION_KEY = 'kora_session';
-const COMPANIES_KEY = 'kora_companies';
+const API = import.meta.env.VITE_API_URL || '/api';
 
-function getStored<T>(key: string, fallback: T): T {
-  try {
-    const raw = localStorage.getItem(key);
-    return raw ? JSON.parse(raw) : fallback;
-  } catch {
-    return fallback;
+async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
+  const token = localStorage.getItem('kora_token');
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+
+  const res = await fetch(`${API}${path}`, { headers, ...options });
+  if (!res.ok) {
+    const body = await res.text().catch(() => '');
+    throw new Error(body || res.statusText);
   }
-}
-
-function generateId(): string {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  return res.json();
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<AuthState>(() => {
-    const session = getStored<{ userId: string; companyId: string | null } | null>(SESSION_KEY, null);
-    if (!session) return { user: null, company: null, isAuthenticated: false };
+  const [state, setState] = useState<AuthState>({ user: null, company: null, isAuthenticated: false, loading: true });
 
-    const users = getStored<Record<string, User>>(USERS_KEY, {});
-    const user = users[session.userId] ?? null;
-    const companies = getStored<Record<string, Company>>(COMPANIES_KEY, {});
-    const company = session.companyId ? companies[session.companyId] ?? null : null;
-
-    return { user, company, isAuthenticated: !!user };
-  });
-
-  useEffect(() => {
-    if (state.user) {
-      localStorage.setItem(SESSION_KEY, JSON.stringify({
-        userId: state.user.id,
-        companyId: state.company?.id ?? null,
-      }));
-    } else {
-      localStorage.removeItem(SESSION_KEY);
+  const restoreSession = useCallback(async () => {
+    const token = localStorage.getItem('kora_token');
+    if (!token) {
+      setState((prev) => ({ ...prev, loading: false }));
+      return;
     }
-  }, [state]);
+    try {
+      const data = await apiFetch<{ user: User; company: Company | null }>('/api/me');
+      setState({ user: data.user, company: data.company, isAuthenticated: true, loading: false });
+    } catch {
+      localStorage.removeItem('kora_token');
+      setState({ user: null, company: null, isAuthenticated: false, loading: false });
+    }
+  }, []);
 
-  function login(email: string, _password: string): boolean {
-    const users = getStored<Record<string, User>>(USERS_KEY, {});
-    const found = Object.values(users).find((u) => u.email === email);
-    if (!found) return false;
+  useEffect(() => { restoreSession(); }, [restoreSession]);
 
-    const companies = getStored<Record<string, Company>>(COMPANIES_KEY, {});
-    const company = found.companyId ? companies[found.companyId] ?? null : null;
-
-    setState({ user: found, company, isAuthenticated: true });
-    return true;
+  async function login(email: string, password: string): Promise<boolean> {
+    try {
+      const data = await apiFetch<{ user: User; token: string }>('/api/auth/login', {
+        method: 'POST', body: JSON.stringify({ email, password }),
+      });
+      localStorage.setItem('kora_token', data.token);
+      const me = await apiFetch<{ user: User; company: Company | null }>('/api/me');
+      setState({ user: me.user, company: me.company, isAuthenticated: true, loading: false });
+      return true;
+    } catch {
+      return false;
+    }
   }
 
-  function register(name: string, email: string, _password: string): boolean {
-    const users = getStored<Record<string, User>>(USERS_KEY, {});
-    if (Object.values(users).some((u) => u.email === email)) return false;
-
-    const id = generateId();
-    const newUser: User = { id, name, email, companyId: null };
-    users[id] = newUser;
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-
-    setState({ user: newUser, company: null, isAuthenticated: true });
-    return true;
+  async function register(name: string, email: string, password: string): Promise<boolean> {
+    try {
+      const data = await apiFetch<{ user: User; token: string }>('/api/auth/register', {
+        method: 'POST', body: JSON.stringify({ name, email, password }),
+      });
+      localStorage.setItem('kora_token', data.token);
+      setState({ user: data.user, company: null, isAuthenticated: true, loading: false });
+      return true;
+    } catch {
+      return false;
+    }
   }
 
-  function registerCompany(data: Omit<Company, 'id'>) {
-    const companies = getStored<Record<string, Company>>(COMPANIES_KEY, {});
-    const id = generateId();
-    const newCompany: Company = { id, ...data };
-    companies[id] = newCompany;
-    localStorage.setItem(COMPANIES_KEY, JSON.stringify(companies));
-
-    const users = getStored<Record<string, User>>(USERS_KEY, {});
-    if (state.user) {
-      users[state.user.id] = { ...state.user, companyId: id };
-      localStorage.setItem(USERS_KEY, JSON.stringify(users));
-    }
-
+  async function registerCompany(form: Omit<Company, 'id'>): Promise<void> {
+    const data = await apiFetch<{ company: Company; token: string }>('/api/company', {
+      method: 'POST', body: JSON.stringify(form),
+    });
+    localStorage.setItem('kora_token', data.token);
     setState((prev) => ({
       ...prev,
-      user: prev.user ? { ...prev.user, companyId: id } : null,
-      company: newCompany,
+      company: data.company,
+      user: prev.user ? { ...prev.user, companyId: data.company.id } : null,
     }));
   }
 
-  function updateCompany(data: Partial<Company>) {
-    if (!state.company) return;
-    const companies = getStored<Record<string, Company>>(COMPANIES_KEY, {});
-    const updated = { ...state.company, ...data };
-    companies[state.company.id] = updated;
-    localStorage.setItem(COMPANIES_KEY, JSON.stringify(companies));
-    setState((prev) => ({ ...prev, company: updated }));
+  async function updateCompany(form: Partial<Company>): Promise<void> {
+    const data = await apiFetch<{ company: Company }>('/api/company', {
+      method: 'PUT', body: JSON.stringify(form),
+    });
+    setState((prev) => ({ ...prev, company: data.company }));
   }
 
   function logout() {
-    localStorage.removeItem(SESSION_KEY);
-    setState({ user: null, company: null, isAuthenticated: false });
+    localStorage.removeItem('kora_token');
+    setState({ user: null, company: null, isAuthenticated: false, loading: false });
   }
 
   return (

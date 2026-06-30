@@ -19,18 +19,18 @@ export function LoginPage() {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
 
-    setTimeout(() => {
+    try {
       if (mode === 'login') {
-        const ok = login(form.email, form.password);
+        const ok = await login(form.email, form.password);
         if (ok) {
           toast('Welcome back!', 'success');
           navigate('/');
         } else {
-          toast('No account found with that email. Please register.', 'error');
+          toast('Invalid email or password.', 'error');
         }
       } else {
         if (!form.name.trim()) {
@@ -38,7 +38,7 @@ export function LoginPage() {
           setLoading(false);
           return;
         }
-        const ok = register(form.name, form.email, form.password);
+        const ok = await register(form.name, form.email, form.password);
         if (ok) {
           toast('Account created! Now set up your business.', 'success');
           navigate('/onboarding');
@@ -46,8 +46,10 @@ export function LoginPage() {
           toast('An account with this email already exists.', 'error');
         }
       }
-      setLoading(false);
-    }, 600);
+    } catch {
+      toast('Something went wrong. Please try again.', 'error');
+    }
+    setLoading(false);
   }
 
   function switchMode() {
