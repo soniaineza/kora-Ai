@@ -32,11 +32,11 @@ export function GrowthCenter() {
   return (
     <div className="max-w-4xl mx-auto pb-12">
       <div className="mb-8 text-center">
-        <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-kora-400 to-kora-600 text-white mb-3 shadow-glow">
-          <Sparkles className="w-6 h-6" />
+        <div className="inline-flex items-center justify-center w-12 h-12 rounded-3xl bg-charcoal mb-3">
+          <Sparkles className="w-6 h-6 text-gold-500" />
         </div>
-        <h1 className="text-xl font-bold text-gray-900 mb-1.5">Growth Center</h1>
-        <p className="text-sm text-gray-500 max-w-xl mx-auto">
+        <h1 className="text-xl font-bold text-charcoal tracking-tight">Growth Center</h1>
+        <p className="text-sm text-silver max-w-xl mx-auto">
           Tell AI what you want to achieve, and it will instantly generate a complete, multi-channel marketing campaign tailored to your business.
         </p>
       </div>
@@ -48,14 +48,14 @@ export function GrowthCenter() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
-            className="bg-white rounded-xl border border-gray-100 p-6 shadow-card max-w-lg mx-auto"
+            className="card p-6 max-w-lg mx-auto"
           >
             <div className="space-y-5">
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1.5 flex items-center gap-1.5">
-                  <Target className="w-3.5 h-3.5 text-kora-500" /> What is your main goal?
+                <label className="label flex items-center gap-1.5">
+                  <Target className="w-3.5 h-3.5 text-gold-500" /> What is your main goal?
                 </label>
-                <select value={goal} onChange={(e) => setGoal(e.target.value)} className="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-kora-500/20 outline-none text-sm text-gray-900">
+                <select value={goal} onChange={(e) => setGoal(e.target.value)} className="input-field">
                   <option>Get More Customers</option>
                   <option>Promote a New Product</option>
                   <option>Increase Weekend Sales</option>
@@ -63,21 +63,21 @@ export function GrowthCenter() {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1.5 flex items-center gap-1.5">
-                  <Wallet className="w-3.5 h-3.5 text-kora-500" /> Budget (RWF)
+                <label className="label flex items-center gap-1.5">
+                  <Wallet className="w-3.5 h-3.5 text-gold-500" /> Budget (RWF)
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm font-medium">RWF</span>
-                  <input type="text" value={budget} onChange={(e) => setBudget(e.target.value)} className="w-full p-2.5 pl-12 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-kora-500/20 outline-none text-sm text-gray-900" />
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted text-sm font-medium">RWF</span>
+                  <input type="text" value={budget} onChange={(e) => setBudget(e.target.value)} className="input-field pl-12" />
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1.5 flex items-center gap-1.5">
-                  <Store className="w-3.5 h-3.5 text-kora-500" /> Business Type
+                <label className="label flex items-center gap-1.5">
+                  <Store className="w-3.5 h-3.5 text-gold-500" /> Business Type
                 </label>
-                <input type="text" value={businessType} onChange={(e) => setBusinessType(e.target.value)} className="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-kora-500/20 outline-none text-sm text-gray-900" />
+                <input type="text" value={businessType} onChange={(e) => setBusinessType(e.target.value)} className="input-field" />
               </div>
-              <button onClick={handleGenerate} className="w-full py-2.5 bg-gradient-to-r from-kora-500 to-kora-600 hover:from-kora-600 hover:to-kora-700 text-white font-medium rounded-lg shadow-glow transition-all flex items-center justify-center gap-2 text-sm mt-4">
+              <button onClick={handleGenerate} className="w-full py-3 bg-charcoal text-white font-medium rounded-2xl hover:bg-charcoal/80 transition-all flex items-center justify-center gap-2 text-sm mt-2">
                 <Sparkles className="w-4 h-4" /> Generate Growth Plan
               </button>
             </div>
@@ -87,14 +87,14 @@ export function GrowthCenter() {
         {step === 'generating' && (
           <motion.div key="generating" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center justify-center py-16">
             <div className="relative w-16 h-16 mb-5">
-              <div className="absolute inset-0 rounded-full border-3 border-gray-100" />
-              <div className="absolute inset-0 rounded-full border-3 border-kora-500 border-t-transparent animate-spin" />
-              <div className="absolute inset-0 flex items-center justify-center text-kora-500">
+              <div className="absolute inset-0 rounded-full border-3 border-border" />
+              <div className="absolute inset-0 rounded-full border-3 border-charcoal border-t-transparent animate-spin" />
+              <div className="absolute inset-0 flex items-center justify-center text-charcoal">
                 <Sparkles className="w-6 h-6 animate-pulse" />
               </div>
             </div>
-            <h2 className="text-lg font-bold text-gray-900 mb-1.5">AI is working its magic...</h2>
-            <div className="text-sm text-gray-500 h-5 overflow-hidden">
+            <h2 className="text-lg font-bold text-charcoal mb-1.5">AI is working its magic...</h2>
+            <div className="text-sm text-silver h-5 overflow-hidden">
               <motion.div animate={{ y: [0, -20, -40, -60] }} transition={{ duration: 3, ease: 'linear', repeat: Infinity }} className="flex flex-col">
                 <span className="h-5">Analyzing your business profile...</span>
                 <span className="h-5">Designing promotional posters...</span>
@@ -107,72 +107,72 @@ export function GrowthCenter() {
 
         {step === 'results' && plan && (
           <motion.div key="results" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-            <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-start gap-3">
+            <div className="bg-green-50 border border-green-200 rounded-3xl p-4 flex items-start gap-3">
               <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 shrink-0">
                 <CheckCircle2 className="w-5 h-5" />
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-sm font-bold text-green-900 mb-0.5">Your Growth Plan is Ready!</h3>
                 <p className="text-xs text-green-800">
-                  We've created a comprehensive campaign to help your {plan.businessType} achieve &quot;{plan.goal}&quot; with a budget of {plan.budget} RWF.
+                  We've created a comprehensive campaign to help your {plan.businessType} achieve "{plan.goal}" with a budget of {plan.budget} RWF.
                 </p>
               </div>
-              <button onClick={() => setStep('input')} className="shrink-0 px-3 py-1.5 bg-white border border-green-200 text-green-700 rounded-lg text-xs font-medium hover:bg-green-50 transition-colors">Start Over</button>
+              <button onClick={() => setStep('input')} className="shrink-0 px-3 py-1.5 bg-white border border-green-200 text-green-700 rounded-2xl text-xs font-medium hover:bg-green-50 transition-colors">Start Over</button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-card">
+              <div className="card p-5">
                 <div className="flex items-center gap-2.5 mb-3">
-                  <div className="p-1.5 bg-purple-100 text-purple-600 rounded-md"><ImageIcon className="w-4 h-4" /></div>
-                  <h3 className="text-sm font-bold text-gray-900">AI Generated Posters</h3>
+                  <div className="p-1.5 bg-purple-50 text-purple-600 rounded-xl"><ImageIcon className="w-4 h-4" /></div>
+                  <h3 className="text-sm font-bold text-charcoal">AI Generated Posters</h3>
                 </div>
                 <div className="grid grid-cols-2 gap-3 mb-3">
                   {plan.posters.map((src, i) => (
-                    <div key={i} className="aspect-[4/5] bg-gray-100 rounded-lg overflow-hidden relative group">
+                    <div key={i} className="aspect-[4/5] bg-cream rounded-2xl overflow-hidden relative group">
                       <img src={src} alt="Poster" className="w-full h-full object-cover" />
-                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <button className="px-3 py-1.5 bg-white text-gray-900 rounded-md text-xs font-medium">Download</button>
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-2xl">
+                        <button className="px-3 py-1.5 bg-white text-charcoal rounded-2xl text-xs font-medium">Download</button>
                       </div>
                     </div>
                   ))}
                 </div>
-                <button className="w-full py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 text-sm font-medium rounded-lg transition-colors">View All Designs</button>
+                <button className="w-full py-2.5 bg-cream hover:bg-hover text-silver text-sm font-medium rounded-2xl transition-colors">View All Designs</button>
               </div>
 
-              <div className="bg-white rounded-xl border border-gray-100 p-5 shadow-card">
+              <div className="card p-5">
                 <div className="flex items-center gap-2.5 mb-3">
-                  <div className="p-1.5 bg-emerald-100 text-emerald-600 rounded-md"><MessageCircle className="w-4 h-4" /></div>
-                  <h3 className="text-sm font-bold text-gray-900">WhatsApp Broadcast</h3>
+                  <div className="p-1.5 bg-emerald-50 text-emerald-600 rounded-xl"><MessageCircle className="w-4 h-4" /></div>
+                  <h3 className="text-sm font-bold text-charcoal">WhatsApp Broadcast</h3>
                 </div>
-                <div className="bg-emerald-50 border border-emerald-100 rounded-lg p-3 mb-3">
-                  <p className="text-xs text-gray-800 whitespace-pre-line">{plan.whatsappMessage}</p>
+                <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-3 mb-3">
+                  <p className="text-xs text-charcoal whitespace-pre-line">{plan.whatsappMessage}</p>
                 </div>
                 <div className="flex gap-2">
-                  <button className="flex-1 py-2 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5">
+                  <button className="flex-1 py-2.5 bg-charcoal hover:bg-charcoal/80 text-white text-sm font-medium rounded-2xl transition-colors flex items-center justify-center gap-1.5">
                     <Share2 className="w-3.5 h-3.5" /> Send Now
                   </button>
-                  <button className="px-3 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 text-sm font-medium rounded-lg transition-colors">Edit</button>
+                  <button className="px-3 py-2.5 bg-cream hover:bg-hover text-silver text-sm font-medium rounded-2xl transition-colors">Edit</button>
                 </div>
               </div>
 
-              <div className="md:col-span-2 bg-white rounded-xl border border-gray-100 p-5 shadow-card">
+              <div className="md:col-span-2 card p-5">
                 <div className="flex items-center gap-2.5 mb-4">
-                  <div className="p-1.5 bg-blue-100 text-blue-600 rounded-md"><Calendar className="w-4 h-4" /></div>
-                  <h3 className="text-sm font-bold text-gray-900">Weekly Promotion Plan</h3>
+                  <div className="p-1.5 bg-blue-50 text-blue-600 rounded-xl"><Calendar className="w-4 h-4" /></div>
+                  <h3 className="text-sm font-bold text-charcoal">Weekly Promotion Plan</h3>
                 </div>
                 <div className="space-y-3">
                   {plan.weeklyPlan.map((item) => (
-                    <div key={item.day} className="flex gap-3 p-3 rounded-lg border border-gray-50 hover:bg-gray-50 transition-colors">
+                    <div key={item.day} className="flex gap-3 p-3 rounded-2xl border border-border hover:bg-cream transition-colors">
                       <div className="w-12 text-center shrink-0">
-                        <span className="block text-[10px] font-bold text-gray-400 uppercase">Day</span>
-                        <span className="block text-sm font-bold text-gray-900">{item.day}</span>
+                        <span className="block text-[10px] font-bold text-muted uppercase">Day</span>
+                        <span className="block text-sm font-bold text-charcoal">{item.day}</span>
                       </div>
-                      <div className="w-px bg-gray-100" />
+                      <div className="w-px bg-border" />
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-sm font-bold text-gray-900">{item.title}</h4>
-                        <p className="text-xs text-gray-500 mt-0.5">{item.description}</p>
+                        <h4 className="text-sm font-bold text-charcoal">{item.title}</h4>
+                        <p className="text-xs text-silver mt-0.5">{item.description}</p>
                       </div>
-                      <button className="shrink-0 self-center px-3 py-1.5 bg-kora-50 text-kora-600 rounded-lg text-xs font-medium">Schedule</button>
+                      <button className="shrink-0 self-center px-3 py-1.5 bg-cream text-charcoal rounded-2xl text-xs font-medium hover:bg-hover transition-colors">Schedule</button>
                     </div>
                   ))}
                 </div>

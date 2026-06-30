@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
-  Store, Sparkles, ArrowRight, Building2, Phone, MapPin, Globe, FileText, Palette, Check,
+  Store, Sparkles, ArrowRight, Building2, Phone, MapPin, Globe, FileText, Palette, Check, ChevronRight,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../hooks/useToast';
@@ -12,7 +12,7 @@ const businessTypes = [
   'Bar & Lounge', 'Hotel', 'Gym & Fitness', 'Service Business', 'Other',
 ];
 
-const brandColors = ['#F97316', '#EF4444', '#8B5CF6', '#3B82F6', '#10B981', '#000000'];
+const brandColors = ['#111111', '#D4AF37', '#EF4444', '#8B5CF6', '#3B82F6', '#10B981'];
 
 const industryOptions = [
   'Food & Beverage', 'Retail', 'Hospitality', 'Health & Beauty',
@@ -34,7 +34,7 @@ export function CompanyRegistration() {
     address: '',
     website: '',
     logo: '',
-    brandColor: '#F97316',
+    brandColor: '#D4AF37',
   });
 
   function update(field: string, value: string) {
@@ -58,76 +58,67 @@ export function CompanyRegistration() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-        <div className="absolute top-20 right-20 w-72 h-72 bg-kora-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 left-10 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl" />
-      </div>
-
+    <div className="min-h-screen bg-cream flex items-center justify-center p-4">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative z-10 w-full max-w-lg"
+        className="w-full max-w-[520px]"
       >
         <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br from-kora-400 to-kora-600 shadow-glow mb-3">
-            <Store className="w-6 h-6 text-white" />
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-3xl bg-charcoal mb-3">
+            <Store className="w-6 h-6 text-gold-500" />
           </div>
-          <h1 className="text-xl font-bold text-white">Register Your Business</h1>
-          <p className="text-sm text-slate-400 mt-1">Set up your company profile to get started</p>
+          <h1 className="text-xl font-bold text-charcoal tracking-tight">Register Your Business</h1>
+          <p className="text-sm text-silver mt-0.5">Set up your company profile to get started</p>
         </div>
 
         <div className="flex items-center justify-center gap-2 mb-6">
           {[1, 2].map((s) => (
             <div key={s} className="flex items-center gap-2">
-              <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
-                step >= s ? 'bg-kora-500 text-white' : 'bg-slate-700 text-slate-500'
+              <div className={`w-7 h-7 rounded-2xl flex items-center justify-center text-xs font-bold transition-colors ${
+                step >= s ? 'bg-charcoal text-white' : 'bg-border text-muted'
               }`}>
                 {step > s ? <Check className="w-3.5 h-3.5" /> : s}
               </div>
-              <span className={`text-xs ${step >= s ? 'text-white' : 'text-slate-500'}`}>
+              <span className={`text-xs ${step >= s ? 'text-charcoal font-medium' : 'text-muted'}`}>
                 {s === 1 ? 'Business Info' : 'Details'}
               </span>
-              {s < 2 && <div className={`w-8 h-0.5 ${step > 1 ? 'bg-kora-500' : 'bg-slate-700'}`} />}
+              {s < 2 && <ChevronRight className="w-3.5 h-3.5 text-muted" />}
             </div>
           ))}
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl p-6">
+        <div className="card p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             {step === 1 && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">
-                    Business Name <span className="text-red-400">*</span>
-                  </label>
+                  <label className="label">Business Name <span className="text-muted">*</span></label>
                   <div className="relative">
-                    <Store className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <Store className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
                     <input
                       type="text"
                       value={form.name}
                       onChange={(e) => update('name', e.target.value)}
                       placeholder="e.g. Sunny Cafe"
-                      className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-kora-500/20 text-sm text-gray-900"
+                      className="input-field pl-10"
                       required
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">
-                    Business Type <span className="text-red-400">*</span>
-                  </label>
+                  <label className="label">Business Type <span className="text-muted">*</span></label>
                   <div className="grid grid-cols-2 gap-2">
                     {businessTypes.map((t) => (
                       <button
                         key={t}
                         type="button"
                         onClick={() => update('type', t)}
-                        className={`px-3 py-2 rounded-lg text-xs font-medium border transition-colors text-left ${
+                        className={`px-3.5 py-2.5 rounded-2xl text-xs font-medium border transition-all text-left ${
                           form.type === t
-                            ? 'bg-kora-50 border-kora-300 text-kora-700'
-                            : 'bg-gray-50 border-gray-200 text-gray-600 hover:border-gray-300'
+                            ? 'bg-charcoal text-white border-charcoal'
+                            : 'bg-white text-silver border-border hover:border-silver hover:text-charcoal'
                         }`}
                       >
                         {t}
@@ -137,11 +128,11 @@ export function CompanyRegistration() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Industry</label>
+                  <label className="label">Industry</label>
                   <select
                     value={form.industry}
                     onChange={(e) => update('industry', e.target.value)}
-                    className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-kora-500/20 text-sm text-gray-900"
+                    className="input-field"
                   >
                     <option value="">Select industry...</option>
                     {industryOptions.map((opt) => (
@@ -151,15 +142,15 @@ export function CompanyRegistration() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Description</label>
+                  <label className="label">Description</label>
                   <div className="relative">
-                    <FileText className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                    <FileText className="absolute left-3.5 top-3 w-4 h-4 text-muted" />
                     <textarea
                       value={form.description}
                       onChange={(e) => update('description', e.target.value)}
                       placeholder="Tell us about your business..."
                       rows={3}
-                      className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-kora-500/20 text-sm text-gray-900 resize-none"
+                      className="input-field pl-10 resize-none"
                     />
                   </div>
                 </div>
@@ -167,7 +158,7 @@ export function CompanyRegistration() {
                 <button
                   type="button"
                   onClick={() => setStep(2)}
-                  className="w-full py-2.5 bg-kora-500 hover:bg-kora-600 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2 shadow-glow"
+                  className="w-full py-3 bg-charcoal text-white text-sm font-medium rounded-2xl hover:bg-charcoal/80 transition-all flex items-center justify-center gap-2"
                 >
                   Next Step <ArrowRight className="w-4 h-4" />
                 </button>
@@ -177,57 +168,57 @@ export function CompanyRegistration() {
             {step === 2 && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Phone Number</label>
+                  <label className="label">Phone Number</label>
                   <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
                     <input
                       type="tel"
                       value={form.phone}
                       onChange={(e) => update('phone', e.target.value)}
                       placeholder="+250 788 123 456"
-                      className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-kora-500/20 text-sm text-gray-900"
+                      className="input-field pl-10"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Address</label>
+                  <label className="label">Address</label>
                   <div className="relative">
-                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
                     <input
                       type="text"
                       value={form.address}
                       onChange={(e) => update('address', e.target.value)}
                       placeholder="Kigali, Rwanda"
-                      className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-kora-500/20 text-sm text-gray-900"
+                      className="input-field pl-10"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Website</label>
+                  <label className="label">Website</label>
                   <div className="relative">
-                    <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <Globe className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
                     <input
                       type="url"
                       value={form.website}
                       onChange={(e) => update('website', e.target.value)}
                       placeholder="https://sunnycafe.com"
-                      className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-kora-500/20 text-sm text-gray-900"
+                      className="input-field pl-10"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-2">Brand Color</label>
+                  <label className="label">Brand Color</label>
                   <div className="flex gap-2">
                     {brandColors.map((c) => (
                       <button
                         key={c}
                         type="button"
                         onClick={() => update('brandColor', c)}
-                        className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
-                          form.brandColor === c ? 'ring-2 ring-offset-2 ring-gray-400 scale-110' : ''
+                        className={`w-9 h-9 rounded-2xl flex items-center justify-center transition-all ${
+                          form.brandColor === c ? 'ring-2 ring-offset-2 ring-charcoal scale-110' : ''
                         }`}
                         style={{ backgroundColor: c }}
                       >
@@ -237,17 +228,17 @@ export function CompanyRegistration() {
                   </div>
                 </div>
 
-                <div className="flex gap-3 pt-2">
+                <div className="flex gap-3 pt-1">
                   <button
                     type="button"
                     onClick={() => setStep(1)}
-                    className="flex-1 py-2.5 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
+                    className="flex-1 py-3 bg-white border border-border text-silver text-sm font-medium rounded-2xl hover:bg-hover transition-all"
                   >
                     Back
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 py-2.5 bg-kora-500 hover:bg-kora-600 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2 shadow-glow"
+                    className="flex-1 py-3 bg-charcoal text-white text-sm font-medium rounded-2xl hover:bg-charcoal/80 transition-all flex items-center justify-center gap-2"
                   >
                     Complete Setup <Sparkles className="w-4 h-4" />
                   </button>
