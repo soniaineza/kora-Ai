@@ -19,7 +19,6 @@ const sourceStyles: Record<Source, { bg: string; text: string; icon: React.Eleme
   Website: { bg: 'bg-indigo-50', text: 'text-indigo-600', icon: Globe },
   'Walk-in': { bg: 'bg-amber-50', text: 'text-amber-600', icon: Store },
 };
-
 const statusStyles: Record<Status, string> = {
   Active: 'bg-green-50 text-green-700 ring-1 ring-green-100',
   Lead: 'bg-kora-50 text-kora-700 ring-1 ring-kora-100',
